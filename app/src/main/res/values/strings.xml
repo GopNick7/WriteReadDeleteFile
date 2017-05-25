@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">WriteReadDeleteFile</string>
-    <string name="save">Save</string>
-    <string name="fileSaved">File saved</string>
+    <string name="write">Write</string>
+    <string name="fileWritten">File written</string>
+    <string name="read">Read</string>
+    <string name="fileReadOut">File read out</string>
 </resources>
