@@ -4,4 +4,8 @@
     <string name="fileWritten">File written</string>
     <string name="read">Read</string>
     <string name="fileReadOut">File read out</string>
+    <string name="delete">Delete</string>
+    <string name="fileDeleted">File deleted</string>
+    <string name="fileNotDeleted">File not deleted</string>
+    <string name="fileNotRead">File not read</string>
 </resources>

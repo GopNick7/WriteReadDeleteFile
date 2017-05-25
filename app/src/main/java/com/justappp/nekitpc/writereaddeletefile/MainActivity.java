@@ -11,10 +11,11 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.nio.CharBuffer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private EditText edtWrite;
     private TextView txtRead;
-    private Button btnWrite, btnRead;
+    private Button btnWrite, btnRead, btnDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnWrite = (Button) findViewById(R.id.btnWrite);
         btnRead = (Button) findViewById(R.id.btnRead);
+        btnDelete = (Button) findViewById(R.id.btnDelete);
 
         btnWrite.setOnClickListener(this);
         btnRead.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
     }
 
     private void writeData(String fileName, String data) {
@@ -55,20 +58,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private String readData(String fileName){
+    private String readData(String fileName) {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(openFileInput(fileName)));
 
             String line;
 
-            while ((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null) {
                 return line;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 reader.close();
             } catch (IOException e) {
@@ -76,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         return null;
+    }
+
+    public boolean deleteFile(String fileName) {
+        File file = new File(getFilesDir(), fileName);
+        return file.delete();
     }
 
     @Override
@@ -86,8 +94,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, R.string.fileWritten, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnRead:
-                txtRead.setText(readData(FILE_NAME));
-                Toast.makeText(MainActivity.this, R.string.fileReadOut, Toast.LENGTH_SHORT).show();
+                try {
+                    txtRead.setText(readData(FILE_NAME));
+                    Toast.makeText(MainActivity.this, R.string.fileReadOut, Toast.LENGTH_SHORT).show();
+                }catch (NullPointerException e){
+                    Toast.makeText(MainActivity.this, R.string.fileNotRead, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.btnDelete:
+                if (deleteFile(FILE_NAME)) {
+                    Toast.makeText(MainActivity.this, R.string.fileDeleted, Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(MainActivity.this, R.string.fileNotDeleted, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
